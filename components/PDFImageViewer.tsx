@@ -1,26 +1,30 @@
-// "use client";
+"use client";
 
-// import React from "react";
-// import { Worker, Viewer } from "@react-pdf-viewer/core";
-// import { thumbnailPlugin } from "@react-pdf-viewer/thumbnail";
-// import "@react-pdf-viewer/core/lib/styles/index.css";
-// import "@react-pdf-viewer/thumbnail/lib/styles/index.css";
+import React, { useState } from "react";
+import { Document, Page } from "react-pdf";
+import "react-pdf/dist/esm/Page/AnnotationLayer.css";
+import "react-pdf/dist/esm/Page/TextLayer.css";
 
-// interface PDFImageViewerProps {
-//     pdfUrl: string;
-//     style?: React.CSSProperties;
-// }
+interface PDFThumbnailViewerProps {
+    pdfUrl: string;
+    style?: React.CSSProperties;
+}
 
-// const PDFImageViewer: React.FC<PDFImageViewerProps> = ({ pdfUrl, style }) => {
-//     const thumbnailPluginInstance = thumbnailPlugin();
+const PDFThumbnailViewer: React.FC<PDFThumbnailViewerProps> = ({ pdfUrl, style }) => {
+    const [numPages, setNumPages] = useState<number | null>(null);
 
-//     return (
-//         <div style={style}>
-//             <Worker workerUrl="https://unpkg.com/pdfjs-dist@3.4.120/build/pdf.worker.min.js">
-//                 <Viewer fileUrl={pdfUrl} plugins={[thumbnailPluginInstance]} />
-//             </Worker>
-//         </div>
-//     );
-// };
+    return (
+        <div style={{ ...style, overflowX: "auto", display: "flex", gap: "10px" }}>
+            <Document
+                file={pdfUrl}
+                onLoadSuccess={({ numPages }) => setNumPages(numPages)}
+            >
+                {Array.from(new Array(numPages), (el, index) => (
+                    <Page key={index} pageNumber={index + 1} width={100} />
+                ))}
+            </Document>
+        </div>
+    );
+};
 
-// export default PDFImageViewer;
+export default PDFThumbnailViewer;
