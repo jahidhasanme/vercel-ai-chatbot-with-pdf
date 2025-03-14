@@ -1,6 +1,7 @@
 import type { Attachment } from 'ai';
 
 import { LoaderIcon } from './icons';
+import Image from 'next/image';
 
 export const PreviewAttachment = ({
   attachment,
@@ -25,7 +26,9 @@ export const PreviewAttachment = ({
               className="rounded-md size-full object-cover"
             />
           ) : (
-            <div className="" />
+            <div className="justify-center items-center flex p-5">
+              <Image src={'/images/pdf.png'} height={60} width={60} alt='PDF' priority/>
+            </div>
           )
         ) : (
           <div className="" />

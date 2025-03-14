@@ -145,13 +145,7 @@ function PureMultimodalInput({
 
       if (response.ok) {
         const data = await response.json();
-        const { url, pathname, contentType } = data;
-
-        return {
-          url,
-          name: pathname,
-          contentType: contentType,
-        };
+        return data;
       }
       const { error } = await response.json();
       toast.error(error);
@@ -169,8 +163,8 @@ function PureMultimodalInput({
       try {
         const uploadPromises = files.map((file) => uploadFile(file));
         const uploadedAttachments = await Promise.all(uploadPromises);
-        const successfullyUploadedAttachments = uploadedAttachments.filter(
-          (attachment) => attachment !== undefined,
+        const successfullyUploadedAttachments = uploadedAttachments[0].filter(
+          (attachment: any) => attachment !== undefined,
         );
 
         setAttachments((currentAttachments) => [
