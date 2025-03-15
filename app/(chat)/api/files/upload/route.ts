@@ -127,7 +127,7 @@ export async function POST(request: Request) {
       const responseData: any[] = [];
       const pdfBase64 = Buffer.from(fileBuffer).toString("base64");
 
-      const response = await fetch("http://65.2.78.43:3002/convert", {
+      const response = await fetch("http://13.127.114.227:3002/convert", {
         method: "POST",
         headers: {
           "Content-Type": "application/json",
@@ -136,6 +136,7 @@ export async function POST(request: Request) {
       });
 
       if (!response.ok) {
+        console.log(response)
         throw new Error("PDF conversion failed");
       }
 
