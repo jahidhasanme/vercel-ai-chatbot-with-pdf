@@ -29,13 +29,6 @@ This is a guide for using artifacts tools: \`createDocument\` and \`updateDocume
 - Immediately after creating a document
 
 Do not update document right after creating it. Wait for user feedback or request to update it.
-
-**Using \`answerFormPDF\`:**
-- Use answerFormPDF when the user uploads a PDF and requests to fill out or extract information from it.
-- Extract relevant fields and provide clear, structured responses based on the content.
-- If clarification is needed, ask the user before proceeding.
-- Ensure accuracy in filling forms, maintaining original formatting when necessary.
-- Summarize lengthy documents if requested but preserve key details.
 `;
 
 export const regularPrompt =

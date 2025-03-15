@@ -18,7 +18,6 @@ import { Tooltip, TooltipContent, TooltipTrigger } from './ui/tooltip';
 import { MessageEditor } from './message-editor';
 import { DocumentPreview } from './document-preview';
 import { MessageReasoning } from './message-reasoning';
-import AnswerFormPDF from './AnswerFormPDF';
 
 const PurePreviewMessage = ({
   chatId,
@@ -143,20 +142,14 @@ const PurePreviewMessage = ({
               <div className="flex flex-col gap-4">
                 {message.toolInvocations.map((toolInvocation) => {
                   const { toolName, toolCallId, state, args } = toolInvocation;
-                  
-                  console.log(toolName)
 
                   if (state === 'result') {
                     const { result } = toolInvocation;
-
-        
 
                     return (
                       <div key={toolCallId}>
                         {toolName === 'getWeather' ? (
                           <Weather weatherAtLocation={result} />
-                        ) : toolName === 'answerFormPDF' ? (
-                          <AnswerFormPDF result={result} />
                         ) : toolName === 'createDocument' ? (
                           <DocumentPreview
                             isReadonly={isReadonly}
@@ -189,8 +182,6 @@ const PurePreviewMessage = ({
                     >
                       {toolName === 'getWeather' ? (
                         <Weather />
-                      ) : toolName === 'answerFormPDF' ? (
-                        <AnswerFormPDF result={null} />
                       ) : toolName === 'createDocument' ? (
                         <DocumentPreview isReadonly={isReadonly} args={args} />
                       ) : toolName === 'updateDocument' ? (

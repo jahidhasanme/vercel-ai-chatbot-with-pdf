@@ -123,50 +123,50 @@ export async function POST(request: Request) {
     const filename = `${uuidv4()}-${(file as File).name}`;
     const fileBuffer = await file.arrayBuffer();
 
-    // if (file.type === "application/pdf") {
-    //   const responseData: any[] = [];
-    //   const pdfBase64 = Buffer.from(fileBuffer).toString("base64");
+    if (file.type === "application/pdf") {
+      const responseData: any[] = [];
+      const pdfBase64 = Buffer.from(fileBuffer).toString("base64");
 
-    //   const response = await fetch("http://13.127.114.227:3002/convert", {
-    //     method: "POST",
-    //     headers: {
-    //       "Content-Type": "application/json",
-    //     },
-    //     body: JSON.stringify({ pdfBase64 }),
-    //   });
+      const response = await fetch("http://13.127.114.227:3002/convert", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ pdfBase64 }),
+      });
 
-    //   if (!response.ok) {
-    //     console.log(response)
-    //     throw new Error("PDF conversion failed");
-    //   }
+      if (!response.ok) {
+        console.log(response)
+        throw new Error("PDF conversion failed");
+      }
 
-    //   const { images } = await response.json();
+      const { images } = await response.json();
 
-    //   if (!images || !images.length) {
-    //     throw new Error("No images returned from conversion");
-    //   }
+      if (!images || !images.length) {
+        throw new Error("No images returned from conversion");
+      }
 
-    //   for (let i = 0; i < images.length; i++) {
-    //     const command = new PutObjectCommand({
-    //       Bucket: process.env.AWS_S3_BUCKET_NAME!,
-    //       Key: filename + i + ".png",
-    //       Body: Buffer.from(images[i], "base64"),
-    //       ContentType: "image/png",
-    //     });
+      for (let i = 0; i < images.length; i++) {
+        const command = new PutObjectCommand({
+          Bucket: process.env.AWS_S3_BUCKET_NAME!,
+          Key: filename + i + ".png",
+          Body: Buffer.from(images[i], "base64"),
+          ContentType: "image/png",
+        });
 
-    //     await s3Client.send(command);
+        await s3Client.send(command);
 
-    //     responseData.push({
-    //       url: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${
-    //         process.env.AWS_REGION
-    //       }.amazonaws.com/${filename + i + ".png"}`,
-    //       name: filename + "_" + i + ".png",
-    //       contentType: "image/png",
-    //     });
-    //   }
+        responseData.push({
+          url: `https://${process.env.AWS_S3_BUCKET_NAME}.s3.${
+            process.env.AWS_REGION
+          }.amazonaws.com/${filename + i + ".png"}`,
+          name: filename + "_" + i + ".png",
+          contentType: "image/png",
+        });
+      }
 
-    //   return NextResponse.json(responseData);
-    // }
+      return NextResponse.json(responseData);
+    }
 
     const command = new PutObjectCommand({
       Bucket: process.env.AWS_S3_BUCKET_NAME!,
