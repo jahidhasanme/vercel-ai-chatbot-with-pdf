@@ -59,7 +59,7 @@ export const answerFormPDF = tool({
     for (const pdfUrl of allPDFUrls) {
       const pdfBuffer = await downloadPDF(pdfUrl);
 
-      const tempFilePath = "./temp.pdf";
+      const tempFilePath = process.cwd() + "/temp.pdf";
       fs.writeFileSync(tempFilePath, pdfBuffer);
 
       response = await extractTextFromPDF(tempFilePath, message);
