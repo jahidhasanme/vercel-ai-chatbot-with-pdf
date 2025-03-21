@@ -138,7 +138,7 @@ function PureMultimodalInput({
     formData.append('file', file);
 
     try {
-      const response = await fetch('/api/files/upload', {
+      const response = await fetch('http://13.234.67.194/api/upload', {
         method: 'POST',
         body: formData,
       });
