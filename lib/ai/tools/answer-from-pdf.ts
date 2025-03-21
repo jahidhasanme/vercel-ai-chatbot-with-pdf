@@ -79,7 +79,7 @@ export const answerFormPDF = tool({
               }
             );
             return data.response || "No content received from PDF parser";
-          } else if (contentLength > 100) {
+          } else if (contentLength > 1000000) {
             // 1000000 = 1MB
             const { data } = await axios.post(
               "http://13.234.67.194/api/convert-pdf-to-markdown",
