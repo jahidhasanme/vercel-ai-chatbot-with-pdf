@@ -9,7 +9,7 @@ const extractTextFromPDF = async (fileBuffer: Buffer, message: string) => {
   });
 
   const file = await client.files.create({
-    file: new File([fileBuffer], 'document.pdf', { type: 'application/pdf' }),
+    file: new File([fileBuffer], "document.pdf", { type: "application/pdf" }),
     purpose: "user_data",
   });
 
@@ -34,7 +34,9 @@ const extractTextFromPDF = async (fileBuffer: Buffer, message: string) => {
     ],
   });
 
-  return completion.choices[0].message.content || "No content received from OpenAI";
+  return (
+    completion.choices[0].message.content || "No content received from OpenAI"
+  );
 };
 
 const downloadPDF = async (url: string) => {
@@ -50,10 +52,53 @@ export const answerFormPDF = tool({
   }),
   execute: async ({ allPDFUrls, message }) => {
     let response = "";
-    for (const pdfUrl of allPDFUrls) {
-      const pdfBuffer = await downloadPDF(pdfUrl);
-      response = await extractTextFromPDF(pdfBuffer, message);
+    try {
+      for (const pdfUrl of allPDFUrls) {
+        try {
+          const headResponse = await axios.head(pdfUrl);
+          const contentLength = parseInt(
+            headResponse.headers["content-length"],
+            10
+          );
+
+          if (contentLength > 10 * 1000000) {
+            // 10 * 1000000 = 10MB
+            const { data } = await axios.post(
+              "http://13.234.67.194/api/convert-large-pdf-to-text",
+              {
+                pdfUrl,
+              }
+            );
+            return data.response || "No content received from PDF parser";
+          } else if (contentLength > 3 * 1000000) {
+            // 3 * 1000000 = 3MB
+            const { data } = await axios.post(
+              "http://13.234.67.194/api/convert-pdf-to-text",
+              {
+                pdfUrl,
+              }
+            );
+            return data.response || "No content received from PDF parser";
+          } else if (contentLength > 100) {
+            // 1000000 = 1MB
+            const { data } = await axios.post(
+              "http://13.234.67.194/api/convert-pdf-to-markdown",
+              {
+                pdfUrl,
+              }
+            );
+            return data.response || "No content received from PDF parser";
+          } else {
+            const pdfBuffer = await downloadPDF(pdfUrl);
+            response = await extractTextFromPDF(pdfBuffer, message);
+          }
+        } catch (error: any) {
+          return `Failed to process PDF: ${error.message}`;
+        }
+      }
+      return response;
+    } catch (error: any) {
+      return `PDF processing error: ${error.message}`;
     }
-    return response;
   },
 });
