@@ -13,8 +13,12 @@ import {
 
 export const user = pgTable('User', {
   id: uuid('id').primaryKey().notNull().defaultRandom(),
+  full_name: varchar('full_name', { length: 128 }).notNull(),
   email: varchar('email', { length: 64 }).notNull(),
-  password: varchar('password', { length: 64 }),
+  password: varchar('password', { length: 64 }).notNull(),
+  profileImage: text(),
+  dob: varchar('dob', { length: 10 }),
+  gender: varchar('gender', { enum: ['male', 'female', 'other'] }),
 });
 
 export type User = InferSelectModel<typeof user>;
