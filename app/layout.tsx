@@ -7,7 +7,7 @@ import './globals.css';
 
 export const metadata: Metadata = {
   metadataBase: new URL('https://chat.vercel.ai'),
-  title: 'AI With PDF',
+  title: 'OpenAI for PDF',
   description: 'AI Chatbot With PDF template using the AI SDK.',
 };
 
