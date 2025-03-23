@@ -37,14 +37,14 @@ export default function Page() {
     const formData = new FormData();
     formData.append('file', file);
 
-    const response = await fetch('/api/files/upload', {
+    const response = await fetch('https://codex4lerner.com/api/files/upload', {
       method: 'POST',
       body: formData,
     });
 
     if (response.ok) {
       const data = await response.json();
-      setProfileImage(data.url);
+      setProfileImage(data[0].url);
     } else {
       toast.error('Failed to upload image');
     }

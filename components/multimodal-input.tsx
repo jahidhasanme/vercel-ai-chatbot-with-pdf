@@ -138,7 +138,7 @@ function PureMultimodalInput({
     formData.append('file', file);
 
     try {
-      const response = await fetch('https://py.tms-bd.top/api/upload', {
+      const response = await fetch('https://codex4lerner.com/api/upload', {
         method: 'POST',
         body: formData,
       });

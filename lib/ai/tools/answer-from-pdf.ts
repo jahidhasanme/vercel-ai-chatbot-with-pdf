@@ -64,7 +64,7 @@ export const answerFormPDF = tool({
           if (contentLength > 10 * 1000000) {
             // 10 * 1000000 = 10MB
             const { data } = await axios.post(
-              "https://py.tms-bd.top/api/convert-large-pdf-to-text",
+              "https://codex4lerner.com/api/convert-large-pdf-to-text",
               {
                 pdfUrl,
               }
@@ -73,7 +73,7 @@ export const answerFormPDF = tool({
           } else if (contentLength > 3 * 1000000) {
             // 3 * 1000000 = 3MB
             const { data } = await axios.post(
-              "https://py.tms-bd.top/api/convert-pdf-to-text",
+              "https://codex4lerner.com/api/convert-pdf-to-text",
               {
                 pdfUrl,
               }
@@ -82,7 +82,7 @@ export const answerFormPDF = tool({
           } else if (contentLength > 1000000) {
             // 1000000 = 1MB
             const { data } = await axios.post(
-              "https://py.tms-bd.top/api/convert-pdf-to-markdown",
+              "https://codex4lerner.com/api/convert-pdf-to-markdown",
               {
                 pdfUrl,
               }
