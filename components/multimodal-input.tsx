@@ -151,7 +151,19 @@ function PureMultimodalInput({
       const response = await axios.post('https://codex4learner.com/api/upload', formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
         onUploadProgress: (progressEvent) => {
-          const percentCompleted = Math.round((progressEvent.loaded * 100) / (progressEvent.total ?? 1));
+          const fileValue = formData.get('file');
+
+          if (!(fileValue instanceof File)) {
+            console.error("File not found in formData");
+            return;
+          }
+
+          const total = progressEvent.lengthComputable && progressEvent.total
+            ? progressEvent.total
+            : fileValue.size;
+          const loaded = progressEvent.loaded || 0;
+          const percentCompleted = total > 0 ? Math.round((loaded * 95) / total) : 0;
+
           updateUploadProgress(file.name, percentCompleted);
         },
       });
@@ -174,13 +186,7 @@ function PureMultimodalInput({
       setUploadQueue(files.map((file) => file.name));
 
       try {
-        const uploadPromises = files.map((file) => {
-          const uploadPromise = uploadFile(file);
-          uploadPromise.then((data) => {
-            updateUploadProgress(file.name, 100);
-          });
-          return uploadPromise;
-        });
+        const uploadPromises = files.map(uploadFile);
         const uploadedAttachments = await Promise.all(uploadPromises);
         const successfullyUploadedAttachments = uploadedAttachments[0].filter(
           (attachment: any) => attachment !== undefined,
