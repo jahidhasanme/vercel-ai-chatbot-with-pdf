@@ -45,7 +45,7 @@ const downloadPDF = async (url: string) => {
 };
 
 export const answerFormPDF = tool({
-  description: "For reading multiple PDFs and returning links",
+  description: "For extracting relevent PDFs content",
   parameters: z.object({
     pathOfFiles: z.array(z.string()),
     message: z.string(),

@@ -1,5 +1,6 @@
 import {
   Attachment,
+  CoreMessage,
   type Message,
   createDataStreamResponse,
   smoothStream,
@@ -74,39 +75,51 @@ export async function POST(request: Request) {
     });
 
     return createDataStreamResponse({
-      execute: (dataStream) => {
+      execute: async (dataStream) => {
         const submitMessages: Message[] = [];
 
-        messages.forEach((message) => {
-          messages.forEach((message) => {
-            const newMessage: Message = {
-              ...message,
-              experimental_attachments: [],
-            };
+        for (const message of messages) {
+          const newMessage: Message = {
+            ...message,
+            experimental_attachments: [],
+          };
 
-            const experimental_attachments: Attachment[] = [];
+          const experimental_attachments: Attachment[] = [];
 
-            if (message.experimental_attachments) {
-              message.experimental_attachments.forEach(
-                (experimental_attachment) => {
-                  if (
-                    experimental_attachment.contentType === "application/pdf"
-                  ) {
-                    newMessage.content += `\n\n PDF url: '${experimental_attachment.url}'  extract this pdf by 'answerFormPDF' tool \n\n`;
-                  } else {
-                    experimental_attachments.push(experimental_attachment);
-                  }
+          if (message.experimental_attachments) {
+            for (const experimental_attachment of message.experimental_attachments) {
+              if (experimental_attachment.contentType === "application/pdf") {
+                try {
+                  const extractedText = await answerFormPDF.execute(
+                    {
+                      pathOfFiles: [experimental_attachment.url],
+                      message: message.content,
+                    },
+                    {
+                      toolCallId: "",
+                      messages: messages.filter((m) =>
+                        ["user", "system", "assistant"].includes(m.role)
+                      ) as CoreMessage[],
+                    }
+                  );
+                  newMessage.content += `\n\nExtracted PDF Content:\n${extractedText}\n\n`;
+                } catch (error) {
+                  console.error("Error extracting PDF:", error);
+                  newMessage.content +=
+                    "\n\n[Failed to extract PDF content.]\n\n";
                 }
-              );
-
-              if (experimental_attachments.length > 0) {
-                newMessage.experimental_attachments = experimental_attachments;
+              } else {
+                experimental_attachments.push(experimental_attachment);
               }
             }
 
-            submitMessages.push(newMessage);
-          });
-        });
+            if (experimental_attachments.length > 0) {
+              newMessage.experimental_attachments = experimental_attachments;
+            }
+          }
+
+          submitMessages.push(newMessage);
+        }
 
         const result = streamText({
           model: myProvider.languageModel(selectedChatModel),
