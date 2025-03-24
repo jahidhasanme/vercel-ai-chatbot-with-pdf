@@ -30,6 +30,7 @@ import { Textarea } from './ui/textarea';
 import { SuggestedActions } from './suggested-actions';
 import equal from 'fast-deep-equal';
 import { UseChatHelpers, UseChatOptions } from '@ai-sdk/react';
+import axios from 'axios';
 
 function PureMultimodalInput({
   chatId,
@@ -109,6 +110,15 @@ function PureMultimodalInput({
 
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [uploadQueue, setUploadQueue] = useState<Array<string>>([]);
+  const [uploadProgress, setUploadProgress] = useState<{ fileName: string; percent: number }>({ fileName: '', percent: 0 });
+
+  const updateUploadProgress = (fileName: string, percent: number) => {
+    setUploadProgress((prevProgress) => ({
+      ...prevProgress,
+      fileName,
+      percent,
+    }));
+  }
 
   const submitForm = useCallback(() => {
     window.history.replaceState({}, '', `/chat/${chatId}`);
@@ -138,17 +148,20 @@ function PureMultimodalInput({
     formData.append('file', file);
 
     try {
-      const response = await fetch('https://codex4learner.com/api/upload', {
-        method: 'POST',
-        body: formData,
+      const response = await axios.post('https://codex4learner.com/api/upload', formData, {
+        headers: { 'Content-Type': 'multipart/form-data' },
+        onUploadProgress: (progressEvent) => {
+          const percentCompleted = Math.round((progressEvent.loaded * 100) / (progressEvent.total ?? 1));
+          updateUploadProgress(file.name, percentCompleted);
+        },
       });
 
-      if (response.ok) {
-        const data = await response.json();
-        return data;
+      if (response.status === 200) {
+        updateUploadProgress(file.name, 100);
+        return response.data;
+      } else {
+        toast.error('Upload failed');
       }
-      const { error } = await response.json();
-      toast.error(error);
     } catch (error) {
       toast.error('Failed to upload file, please try again!');
     }
@@ -161,7 +174,13 @@ function PureMultimodalInput({
       setUploadQueue(files.map((file) => file.name));
 
       try {
-        const uploadPromises = files.map((file) => uploadFile(file));
+        const uploadPromises = files.map((file) => {
+          const uploadPromise = uploadFile(file);
+          uploadPromise.then((data) => {
+            updateUploadProgress(file.name, 100);
+          });
+          return uploadPromise;
+        });
         const uploadedAttachments = await Promise.all(uploadPromises);
         const successfullyUploadedAttachments = uploadedAttachments[0].filter(
           (attachment: any) => attachment !== undefined,
@@ -215,6 +234,7 @@ function PureMultimodalInput({
                 contentType: '',
               }}
               isUploading={true}
+              uploadProgress={uploadProgress}
             />
           ))}
         </div>

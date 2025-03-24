@@ -6,9 +6,14 @@ import Image from 'next/image';
 export const PreviewAttachment = ({
   attachment,
   isUploading = false,
+  uploadProgress
 }: {
   attachment: Attachment;
   isUploading?: boolean;
+  uploadProgress?: {
+    fileName: string;
+    percent: number
+  };
 }) => {
   const { name, url, contentType } = attachment;
 
@@ -27,20 +32,35 @@ export const PreviewAttachment = ({
             />
           ) : (
             <div className="justify-center items-center flex p-5">
-              <Image src={'/images/pdf.png'} height={60} width={60} alt='PDF' priority/>
+              <Image src={'/images/pdf.png'} height={60} width={60} alt='PDF' priority />
             </div>
           )
         ) : (
           <div className="" />
         )}
 
-        {isUploading && (
+        {isUploading && (<>
+          <div className="absolute inset-0 flex flex-col items-center justify-center bg-black/20 rounded-md"></div>
           <div
             data-testid="input-attachment-loader"
-            className="animate-spin absolute text-zinc-500"
+            className="animate-spin text-zinc-500"
           >
             <LoaderIcon />
           </div>
+          {uploadProgress && (
+            <>
+              <div className="text-xs text-zinc-500 mt-1">
+                {uploadProgress.percent}%
+              </div>
+              <div className="w-16 h-1 bg-zinc-200 rounded-full mt-1">
+                <div
+                  className="h-full bg-blue-500 rounded-full transition-all duration-300"
+                  style={{ width: `${uploadProgress.percent}%` }}
+                />
+              </div>
+            </>
+          )}
+        </>
         )}
       </div>
       <div className="text-xs text-zinc-500 max-w-16 truncate">{name}</div>
