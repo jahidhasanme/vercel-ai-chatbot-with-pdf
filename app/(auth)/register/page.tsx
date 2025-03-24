@@ -37,7 +37,7 @@ export default function Page() {
     const formData = new FormData();
     formData.append('file', file);
 
-    const response = await fetch('https://codex4learner.com/api/files/upload', {
+    const response = await fetch('https://codex4learner.com/api/upload', {
       method: 'POST',
       body: formData,
     });
