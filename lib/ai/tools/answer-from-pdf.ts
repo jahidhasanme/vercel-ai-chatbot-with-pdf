@@ -67,7 +67,7 @@ export const answerFormPDF = tool({
               path_of_files: pathOfFiles,
             }
           );
-          return data.response || "No content received from PDF parser";
+          return data.data.response || "No content received from PDF parser";
         } else {
           for (const path of pathOfFiles) {
             const pdfBuffer = await downloadPDF(path);
