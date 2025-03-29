@@ -19,6 +19,7 @@ import { MessageEditor } from './message-editor';
 import { DocumentPreview } from './document-preview';
 import { MessageReasoning } from './message-reasoning';
 import AnswerFormPDF from './AnswerFormPDF';
+import GhibliStyleMaker from './GhibliStyleMaker';
 
 const PurePreviewMessage = ({
   chatId,
@@ -155,6 +156,8 @@ const PurePreviewMessage = ({
                       <div key={toolCallId}>
                         {toolName === 'getWeather' ? (
                           <Weather weatherAtLocation={result} />
+                        ) : toolName === 'ghibliStyleMaker' ? (
+                          <GhibliStyleMaker result={result} />
                         ) : toolName === 'answerFormPDF' ? (
                           <AnswerFormPDF result={result} />
                         ) : toolName === 'createDocument' ? (
@@ -189,6 +192,8 @@ const PurePreviewMessage = ({
                     >
                       {toolName === 'getWeather' ? (
                         <Weather />
+                      ) : toolName === 'ghibliStyleMaker' ? (
+                        <GhibliStyleMaker result={null} />
                       ) : toolName === 'answerFormPDF' ? (
                         <AnswerFormPDF result={null} />
                       ) : toolName === 'createDocument' ? (

@@ -14,7 +14,10 @@ const nextConfig: NextConfig = {
       },
       {
         hostname: 'genrivia.s3.ap-south-1.amazonaws.com',
-      }
+      },
+      {
+        hostname: 'oaidalleapiprodscus.blob.core.windows.net',
+      },
     ],
   },
 };

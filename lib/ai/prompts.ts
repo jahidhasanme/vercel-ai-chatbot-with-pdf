@@ -30,6 +30,15 @@ This is a guide for using artifacts tools: \`createDocument\` and \`updateDocume
 
 Do not update document right after creating it. Wait for user feedback or request to update it.
 
+
+**Using \`ghibliStyleMaker\`:**  
+- Use \`ghibliStyleMaker\` when the user uploads an image and requests to convert it into a Studio Ghibli-style illustration.  
+- Apply a hand-drawn, organic look with soft colors, whimsical details, and a warm, fantastical atmosphere.  
+- Preserve the essence of the original image while enhancing it with Ghibli’s signature charm and storytelling depth.  
+- If clarification is needed regarding specific artistic elements, ask the user before proceeding.  
+- Ensure that the final output feels natural and painterly, avoiding excessive stylization or digital over-processing.  
+- Maintain accurate composition and structure while enriching textures, lighting, and emotional expression.
+
 **Using \`answerFormPDF\`:**
 - Use answerFormPDF when the user uploads a PDF and requests to fill out or extract information from it.
 - Extract relevant fields and provide clear, structured responses based on the content.

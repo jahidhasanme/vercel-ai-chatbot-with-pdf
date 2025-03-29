@@ -28,7 +28,7 @@ import { isProductionEnvironment } from "@/lib/constants";
 import { NextResponse } from "next/server";
 import { myProvider } from "@/lib/ai/providers";
 import { answerFormPDF } from "@/lib/ai/tools/answer-from-pdf";
-import { message } from "../../../../lib/db/schema";
+import { ghibliStyleMaker } from "@/lib/ai/tools/ghibli-style-maker";
 
 export const maxDuration = 60;
 
@@ -131,6 +131,7 @@ export async function POST(request: Request) {
               ? []
               : [
                   "getWeather",
+                  "ghibliStyleMaker",
                   "answerFormPDF",
                   "createDocument",
                   "updateDocument",
@@ -140,6 +141,7 @@ export async function POST(request: Request) {
           experimental_generateMessageId: generateUUID,
           tools: {
             getWeather,
+            ghibliStyleMaker,
             answerFormPDF,
             createDocument: createDocument({ session, dataStream }),
             updateDocument: updateDocument({ session, dataStream }),
