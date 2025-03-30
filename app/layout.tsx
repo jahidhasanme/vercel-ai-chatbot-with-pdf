@@ -6,9 +6,9 @@ import { ThemeProvider } from '@/components/theme-provider';
 import './globals.css';
 
 export const metadata: Metadata = {
-  metadataBase: new URL('https://chat.vercel.ai'),
-  title: 'OpenAI for PDF',
-  description: 'AI Chatbot With PDF template using the AI SDK.',
+  metadataBase: new URL('https://jahid-ghibli-studio.vercel.app'),
+  title: 'Ghibli Studio',
+  description: 'An interactive AI chatbot platform inspired by Studio Ghibli, created by Jahid Hasan. Explore the magical world of animation through conversations enhanced by PDF document analysis and AI-powered responses.',
 };
 
 export const viewport = {

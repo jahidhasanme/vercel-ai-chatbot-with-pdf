@@ -15,12 +15,12 @@ export const Overview = () => {
     >
       <div className="rounded-xl p-6 flex flex-col gap-8 leading-relaxed text-center max-w-xl">
         <p className="flex flex-row justify-center gap-4 items-center">
-          <Image src={'/images/icon.png'} height={38} width={38} alt='PDF logo...' priority />
+          <Image src={'/images/icon.png'} height={38} width={38} alt='App logo...' priority />
           <span>+</span>
           <MessageIcon size={32} />
         </p>
         <p>
-          Please provide me with a large-sized PDF file that I can easily handle😊
+          Welcome to our Ghibli Studio, chatbot! Here, you can explore the enchanting world of animation through natural conversations. Upload your PDF documents and let our AI guide you through insights and discoveries, bringing together the magic of storytelling and intelligent analysis.
         </p>
       </div>
     </motion.div>
