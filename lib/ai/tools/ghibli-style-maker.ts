@@ -11,7 +11,7 @@ export const ghibliStyleMaker = tool({
   execute: async ({ filePath, message }) => {
     try {
       const { data } = await axios.post(
-        "http://127.0.0.1:5000/api/v1/ghibli-style-maker", //"https://codex4learner.com/api/v1/ghibli-style-maker",
+        "https://codex4learner.com/api/v1/ghibli-style-maker", // "http://127.0.0.1:5000/api/v1/ghibli-style-maker", 
         {
           prompt: message,
           image_url: filePath,
