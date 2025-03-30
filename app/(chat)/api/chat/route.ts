@@ -109,6 +109,7 @@ export async function POST(request: Request) {
                     "\n\n[Failed to extract PDF content.]\n\n";
                 }
               } else {
+                newMessage.content += `\n\nImage path is:\n${experimental_attachment.url}\n\n`;
                 experimental_attachments.push(experimental_attachment);
               }
             }

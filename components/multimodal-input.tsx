@@ -183,6 +183,10 @@ function PureMultimodalInput({
     async (event: ChangeEvent<HTMLInputElement>) => {
       const files = Array.from(event.target.files || []);
 
+      if (fileInputRef.current) {
+      fileInputRef.current.value = '';
+    }
+
       setUploadQueue(files.map((file) => file.name));
 
       try {
